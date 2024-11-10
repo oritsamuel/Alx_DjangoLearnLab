@@ -12,7 +12,7 @@ def get_books_in_library(library_name):
 
 # Retrieve the librarian for a library
 def get_librarian_for_library(library_name):
-  library = Library.objects.get(name=library_name)
+  library = Library.objects.get(library__name=keyword_argument=library_name)  # Corrected line
   return library.librarian
 
 # Example usage (replace with your data)
