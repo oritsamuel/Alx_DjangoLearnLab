@@ -11,10 +11,14 @@ def get_books_in_library(library_name):
   return library.books.all()
 
 # Retrieve the librarian for a library
-def get_librarian_for_library(library_name):
-  library = Library.objects.get(library__name=library_name)  # Corrected line
-  return library.librarian
 
+def get_librarian_for_library(library_name):
+    try:
+        library = Library.objects.get(name=library_name)
+        return library.librarian
+    except Library.DoesNotExist:
+        print(f"Library '{library_name}' not found.")
+        return None  # Or handle the error differently, e.g., raise an exception
 # Example usage (replace with your data)
 author_name = "John Doe"
 library_name = "Central Library"
