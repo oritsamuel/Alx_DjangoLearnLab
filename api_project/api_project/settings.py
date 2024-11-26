@@ -125,7 +125,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = {
+''' REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         # Optional: Add session authentication if needed
@@ -133,4 +133,11 @@ REST_FRAMEWORK = {
     ],
     # ... other DRF settings
 }
+'''
 
+REST_FRAMEWORK = {
+    # ... other configurations
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
