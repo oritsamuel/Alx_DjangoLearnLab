@@ -8,7 +8,7 @@ from .forms import PostForm
 from django.contrib.auth import login
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DeleteView, UpdateView
+from django.views.generic import DeleteView, UpdateView, CreateView
 from .forms import CommentForm
 
 def register(request):
@@ -122,3 +122,17 @@ class CommentDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.post.pk})
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        post = get_object_or_404(Post, pk=self.kwargs['post_id'])  # Get the post using the post_id in the URL
+        form.instance.post = post  # Attach the comment to the post
+        form.instance.author = self.request.user  # Set the author to the logged-in user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.object.post.pk})  # Redirect to post detail after success
