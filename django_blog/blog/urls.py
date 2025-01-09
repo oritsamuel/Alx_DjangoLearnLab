@@ -23,6 +23,13 @@ urlpatterns = [
     
     # Delete a post (Only for the post author)
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),
+
+        # Post Detail and Comments
+    path('post/<int:pk>/', views.post_detail, name='post_detail'),
+    
+    # Comment CRUD
+    path('comment/<int:pk>/edit/', views.CommentUpdateView.as_view(), name='comment_edit'),
+    path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment_delete'),
 ]
 
 
