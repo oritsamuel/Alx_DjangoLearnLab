@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post
 from .forms import PostForm
 from django.contrib.auth import login
@@ -53,22 +53,30 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.pk})
 
 # Update View: Allows authors to edit their posts
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
+    def test_func(self):
+        post = self.get_object()
+        # Only the author of the post can edit it
+        return self.request.user == post.author
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.pk})
 
 # Delete View: Allows authors to delete their posts
-class PostDeleteView(LoginRequiredMixin, DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('post_list')
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
+    def test_func(self):
+        post = self.get_object()
+        # Only the author of the post can delete it
+        return self.request.user == post.author
