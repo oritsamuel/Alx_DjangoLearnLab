@@ -101,7 +101,7 @@ def post_detail(request, pk):
     return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments, 'comment_form': comment_form})
 
 # View for editing a comment (only for the author)
-class CommentUpdateView(UpdateView):
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     form_class = CommentForm
     template_name = 'blog/comment_form.html'
@@ -113,7 +113,7 @@ class CommentUpdateView(UpdateView):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.post.pk})
 
 # View for deleting a comment (only for the author)
-class CommentDeleteView(DeleteView):
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
     template_name = 'blog/comment_confirm_delete.html'
 
