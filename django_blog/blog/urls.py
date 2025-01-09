@@ -19,7 +19,7 @@ urlpatterns = [
     path('post/new/', views.PostCreateView.as_view(), name='post_create'),
     
     # Edit an existing post (Only for the post author)
-    path('post/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),
+    path('post/<int:pk>/update/', views.PostUpdateView.as_view(), name='post_edit'),
     
     # Delete a post (Only for the post author)
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),
